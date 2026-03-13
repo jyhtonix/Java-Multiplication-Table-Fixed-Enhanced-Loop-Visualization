@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Multiplication Table - Fixed Enhanced Loop Visualization</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        
+        .code-panel {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        .code-line {
+            padding: 3px 10px;
+            margin: 2px 0;
+            border-left: 4px solid transparent;
+            transition: background-color 0.3s;
+        }
+        
+        .code-line.current {
+            background-color: #34495e;
+            border-left-color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .code-line.array-fill {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .code-line.enhanced-loop {
+            background-color: #8e44ad;
+            color: white;
+        }
+        
+        .loop-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .loop-box {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .loop-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .traditional-loop {
+            background-color: #e8f4f8;
+        }
+        
+        .enhanced-loop-box {
+            background-color: #f3e8f8;
+        }
+        
+        .controls {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .input-group label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        .input-group input {
+            padding: 8px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            width: 80px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .phase-selector {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .phase-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .phase-btn.fill {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .phase-btn.print-traditional {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .phase-btn.print-enhanced {
+            background-color: #8e44ad;
+            color: white;
+        }
+        
+        .phase-btn.active {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid #f1c40f;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .execution-info {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .variable-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .variable-item {
+            background-color: white;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .variable-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .variable-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .array-grid {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s;
+        }
+        
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        td {
+            background-color: #f9f9f9;
+        }
+        
+        td.current-cell {
+            background-color: #f1c40f;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        td.filled-cell {
+            background-color: #27ae60;
+            color: white;
+            font-weight: bold;
+        }
+        
+        td.printing-cell {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            animation: pulseBlue 1s infinite;
+        }
+        
+        td.printed-cell {
+            background-color: #8e44ad;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0% { background-color: #f1c40f; }
+            50% { background-color: #f39c12; }
+            100% { background-color: #f1c40f; }
+        }
+        
+        @keyframes pulseBlue {
+            0% { background-color: #3498db; }
+            50% { background-color: #2980b9; }
+            100% { background-color: #3498db; }
+        }
+        
+        .status-message {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .loop-info {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        
+        .explanation-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .student-quote {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+        
+        .highlight-fix {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Java Multiplication Table - Fixed Enhanced Loop Visualization</h1>
+        
+        <div class="highlight-fix">
+            <strong>✅ FIXED:</strong> The enhanced for-each loop now properly highlights ALL cells in purple, including the last row and column!
+            Previously, the last cell (row 2, col 3 in a 3x4 table) wasn't being highlighted.
+        </div>
+        
+        <div class="student-quote">
+            <strong>👨‍🎓 Student's Code (Enhanced For-Each Loop):</strong> 
+            <code style="background-color: #e9ecef; padding: 5px; border-radius: 3px; display: block; white-space: pre; margin-top: 10px;">
+for (int[] row : table) {
+    for (int value : row) {
+        System.out.print(value + "\t");
+    }
+    System.out.println();
+}
+            </code>
+            <p>✨ This loop automatically iterates through each row and each value without using indices!</p>
+        </div>
+        
+        <div class="phase-selector">
+            <button class="phase-btn fill" onclick="setPhase('fill')" id="phaseFill">📝 Phase 1: Fill Array (Traditional Loops)</button>
+            <button class="phase-btn print-traditional" onclick="setPhase('printTraditional')" id="phaseTraditional">🖨️ Phase 2: Print (Traditional Loops)</button>
+            <button class="phase-btn print-enhanced active" onclick="setPhase('printEnhanced')" id="phaseEnhanced">✨ Phase 3: Print (Enhanced For-Each Loops) - Student's Code</button>
+        </div>
+        
+        <div class="controls">
+            <h2>🔧 Controls</h2>
+            <div class="input-group">
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" min="1" max="5" value="3">
+                
+                <label for="cols">Columns:</label>
+                <input type="number" id="cols" min="1" max="5" value="4">
+                
+                <button onclick="initializeArray()">Initialize Array</button>
+            </div>
+            
+            <div class="input-group">
+                <button onclick="previousStep()" id="prevBtn">◀ Previous</button>
+                <button onclick="nextStep()" id="nextBtn">Next ▶</button>
+                <button onclick="resetVisualization()">🔄 Reset</button>
+                <button onclick="runToEnd()">⏩ Run to End</button>
+            </div>
+            
+            <div class="status-message" id="statusMessage">
+                Click "Initialize Array" to begin
+            </div>
+        </div>
+        
+        <div class="code-panel">
+            <h2>📝 Java Code - <span id="phaseTitle">Phase 3: Printing with Enhanced For-Each (Student's Code)</span></h2>
+            <div id="codeLines">
+                <!-- Phase 1: Filling -->
+                <div class="code-line phase1-code hidden" id="line1">1  // PHASE 1: Fill the multiplication table</div>
+                <div class="code-line phase1-code hidden" id="line2">2  int rows = 3;  // User input</div>
+                <div class="code-line phase1-code hidden" id="line3">3  int columns = 4;</div>
+                <div class="code-line phase1-code hidden" id="line4">4  </div>
+                <div class="code-line phase1-code hidden" id="line5">5  int[][] table = new int[rows][columns];</div>
+                <div class="code-line phase1-code hidden" id="line6">6  </div>
+                <div class="code-line phase1-code hidden" id="line7">7  for (int i = 0; i < rows; i++) {</div>
+                <div class="code-line phase1-code hidden" id="line8">8      for (int j = 0; j < columns; j++) {</div>
+                <div class="code-line phase1-code hidden" id="line9">9          table[i][j] = (i + 1) * (j + 1);</div>
+                <div class="code-line phase1-code hidden" id="line10">10     }</div>
+                <div class="code-line phase1-code hidden" id="line11">11 }</div>
+                
+                <!-- Phase 2: Traditional Print -->
+                <div class="code-line phase2-code hidden" id="line12">12 </div>
+                <div class="code-line phase2-code hidden" id="line13">13 // PHASE 2: Print using traditional loops</div>
+                <div class="code-line phase2-code hidden" id="line14">14 for (int i = 0; i < rows; i++) {</div>
+                <div class="code-line phase2-code hidden" id="line15">15     for (int j = 0; j < columns; j++) {</div>
+                <div class="code-line phase2-code hidden" id="line16">16         System.out.print(table[i][j] + "\t");</div>
+                <div class="code-line phase2-code hidden" id="line17">17     }</div>
+                <div class="code-line phase2-code hidden" id="line18">18     System.out.println();</div>
+                <div class="code-line phase2-code hidden" id="line19">19 }</div>
+                
+                <!-- Phase 3: Enhanced For-Each Print (Student's Code) -->
+                <div class="code-line phase3-code" id="line20">20 </div>
+                <div class="code-line phase3-code" id="line21">21 // PHASE 3: Print using enhanced for-each loops</div>
+                <div class="code-line phase3-code enhanced-loop" id="line22">22 for (int[] row : table) {</div>
+                <div class="code-line phase3-code" id="line23">23     for (int value : row) {</div>
+                <div class="code-line phase3-code" id="line24">24         System.out.print(value + "\t");</div>
+                <div class="code-line phase3-code" id="line25">25     }</div>
+                <div class="code-line phase3-code" id="line26">26     System.out.println();</div>
+                <div class="code-line phase3-code" id="line27">27 }</div>
+            </div>
+        </div>
+        
+        <div class="execution-info">
+            <h2>ℹ️ Execution State</h2>
+            <div class="variable-display" id="variables">
+                <div class="variable-item">
+                    <span class="variable-name">rows:</span>
+                    <span class="variable-value" id="varRows">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">columns:</span>
+                    <span class="variable-value" id="varCols">-</span>
+                </div>
+                <div class="variable-item phase1-vars hidden">
+                    <span class="variable-name">i (row index):</span>
+                    <span class="variable-value" id="vari">-</span>
+                </div>
+                <div class="variable-item phase1-vars hidden">
+                    <span class="variable-name">j (col index):</span>
+                    <span class="variable-value" id="varj">-</span>
+                </div>
+                <div class="variable-item phase2-vars hidden">
+                    <span class="variable-name">i (print row):</span>
+                    <span class="variable-value" id="printI">-</span>
+                </div>
+                <div class="variable-item phase2-vars hidden">
+                    <span class="variable-name">j (print col):</span>
+                    <span class="variable-value" id="printJ">-</span>
+                </div>
+                <div class="variable-item phase3-vars">
+                    <span class="variable-name">current row array:</span>
+                    <span class="variable-value" id="currentRowArray">-</span>
+                </div>
+                <div class="variable-item phase3-vars">
+                    <span class="variable-name">current row index:</span>
+                    <span class="variable-value" id="currentRowIndex">-</span>
+                </div>
+                <div class="variable-item phase3-vars">
+                    <span class="variable-name">current value:</span>
+                    <span class="variable-value" id="currentValue">-</span>
+                </div>
+                <div class="variable-item phase3-vars">
+                    <span class="variable-name">current col index:</span>
+                    <span class="variable-value" id="currentColIndex">-</span>
+                </div>
+                <div class="variable-item">
+                    <span class="variable-name">cell position:</span>
+                    <span class="variable-value" id="currentCell">-</span>
+                </div>
+            </div>
+            
+            <div class="loop-info" id="loopInfo">
+                Loop Status: Not started
+            </div>
+            
+            <div style="background-color: black; color: #00ff00; padding: 10px; border-radius: 5px; font-family: monospace; margin-top: 10px;">
+                <strong>Console Output:</strong>
+                <div id="consoleOutput" style="min-height: 60px;"></div>
+            </div>
+        </div>
+        
+        <div class="array-grid">
+            <h2>📊 Multiplication Table</h2>
+            <div id="tableContainer"></div>
+        </div>
+        
+        <div class="loop-comparison">
+            <div class="loop-box traditional-loop">
+                <h3>🔷 Traditional For Loops</h3>
+                <code>
+                    for (int i = 0; i < rows; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;for (int j = 0; j < columns; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Access using indices<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table[i][j] = ...<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }
+                </code>
+                <p>✅ Gives you access to indices (i, j)<br>✅ Can modify array elements</p>
+            </div>
+            
+            <div class="loop-box enhanced-loop-box">
+                <h3>💜 Enhanced For-Each Loops (Student's Code)</h3>
+                <code>
+                    for (int[] row : table) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;for (int value : row) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Direct access to values<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(value);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }
+                </code>
+                <p>✅ Cleaner, more readable<br>✅ No indices to manage<br>❌ Cannot modify array elements<br>❌ No direct index access</p>
+            </div>
+        </div>
+        
+        <div class="explanation-box">
+            <strong>📖 How Enhanced For-Each Works:</strong><br>
+            • <code>for (int[] row : table)</code> - Gets each entire row array one by one<br>
+            • <code>for (int value : row)</code> - Gets each value in the current row one by one<br>
+            • The loop automatically knows when to start the next row<br>
+            • <span style="color: #8e44ad; font-weight: bold;">Purple cells</span> show values that have been printed<br>
+            • <span style="color: #3498db; font-weight: bold;">Blue cell</span> shows the current value being printed
+        </div>
+        
+        <div class="footer">
+            ✅ FIXED: All cells now properly turn purple, including the last cell (row 2, col 3)!
+        </div>
+    </div>
+
+    <style>
+        .hidden {
+            display: none !important;
+        }
+        
+        .phase1-code, .phase2-code, .phase3-code {
+            transition: all 0.3s;
+        }
+    </style>
+
+    <script>
+        let state = {
+            rows: 3,
+            cols: 4,
+            table: [],
+            phase: 'printEnhanced', // Start with enhanced loop phase
+            i: -1, // For fill phase
+            j: -1,
+            printI: -1, // For traditional print
+            printJ: -1,
+            currentRowArray: null, // For enhanced print - the actual row array
+            currentRowIndex: -1,    // Which row we're on (0, 1, 2...)
+            currentColIndex: -1,    // Which column we're on (0, 1, 2...)
+            currentValue: null,
+            step: 0,
+            maxSteps: {
+                fill: 0,
+                printTraditional: 0,
+                printEnhanced: 0
+            },
+            isInitialized: false,
+            consoleOutput: []
+        };
+        
+        function setPhase(phase) {
+            state.phase = phase;
+            
+            // Update active button
+            document.querySelectorAll('.phase-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('phaseFill').classList.remove('active');
+            document.getElementById('phaseTraditional').classList.remove('active');
+            document.getElementById('phaseEnhanced').classList.remove('active');
+            
+            if (phase === 'fill') {
+                document.getElementById('phaseFill').classList.add('active');
+                document.getElementById('phaseTitle').textContent = 'Phase 1: Filling Array';
+            } else if (phase === 'printTraditional') {
+                document.getElementById('phaseTraditional').classList.add('active');
+                document.getElementById('phaseTitle').textContent = 'Phase 2: Printing with Traditional Loops';
+            } else {
+                document.getElementById('phaseEnhanced').classList.add('active');
+                document.getElementById('phaseTitle').textContent = 'Phase 3: Printing with Enhanced For-Each (Student\'s Code)';
+            }
+            
+            // Show/hide relevant code
+            document.querySelectorAll('.phase1-code').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.phase2-code').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.phase3-code').forEach(el => el.classList.remove('hidden'));
+            
+            document.querySelectorAll('.phase1-vars').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.phase2-vars').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.phase3-vars').forEach(el => el.classList.remove('hidden'));
+            
+            resetVisualization();
+        }
+        
+        function initializeArray() {
+            state.rows = parseInt(document.getElementById('rows').value) || 3;
+            state.cols = parseInt(document.getElementById('cols').value) || 4;
+            
+            // Limit for visualization
+            state.rows = Math.min(5, Math.max(1, state.rows));
+            state.cols = Math.min(5, Math.max(1, state.cols));
+            
+            document.getElementById('rows').value = state.rows;
+            document.getElementById('cols').value = state.cols;
+            
+            // Fill the array completely
+            fillArrayCompletely();
+            
+            // Calculate max steps for each phase
+            state.maxSteps.fill = 1 + (state.rows * state.cols);
+            state.maxSteps.printTraditional = 1 + (state.rows * state.cols);
+            state.maxSteps.printEnhanced = 1 + (state.rows * state.cols); // +1 for start, then each cell
+            
+            resetState();
+            state.isInitialized = true;
+            
+            updateStatus(`Array filled. Ready to print using enhanced for-each loops. Click Next to start.`);
+            updateDisplay();
+            updateCodeHighlight();
+        }
+        
+        function fillArrayCompletely() {
+            state.table = Array(state.rows).fill().map(() => Array(state.cols).fill(0));
+            for (let i = 0; i < state.rows; i++) {
+                for (let j = 0; j < state.cols; j++) {
+                    state.table[i][j] = (i + 1) * (j + 1);
+                }
+            }
+        }
+        
+        function resetState() {
+            if (state.phase === 'fill') {
+                state.i = -1;
+                state.j = -1;
+                state.step = 0;
+                // Reset table to empty for fill phase
+                state.table = Array(state.rows).fill().map(() => Array(state.cols).fill('?'));
+            } else if (state.phase === 'printTraditional') {
+                state.printI = -1;
+                state.printJ = -1;
+                state.step = 0;
+                state.consoleOutput = [];
+            } else if (state.phase === 'printEnhanced') {
+                state.currentRowArray = null;
+                state.currentRowIndex = -1;
+                state.currentColIndex = -1;
+                state.currentValue = null;
+                state.step = 0;
+                state.consoleOutput = [];
+            }
+            
+            document.getElementById('consoleOutput').textContent = '';
+        }
+        
+        function nextStep() {
+            if (!state.isInitialized) {
+                initializeArray();
+                return;
+            }
+            
+            if (state.phase === 'fill') {
+                nextStepFill();
+            } else if (state.phase === 'printTraditional') {
+                nextStepPrintTraditional();
+            } else if (state.phase === 'printEnhanced') {
+                nextStepPrintEnhanced();
+            }
+            
+            updateDisplay();
+        }
+        
+        function nextStepFill() {
+            if (state.step < state.maxSteps.fill) {
+                state.step++;
+                
+                if (state.step === 1) {
+                    updateCodeHighlight(5);
+                    updateStatus("Array created. Ready to start loops.");
+                } else {
+                    let cellIndex = state.step - 2;
+                    let totalCols = state.cols;
+                    
+                    state.i = Math.floor(cellIndex / totalCols);
+                    state.j = cellIndex % totalCols;
+                    
+                    if (state.i < state.rows && state.j < state.cols) {
+                        let value = (state.i + 1) * (state.j + 1);
+                        state.table[state.i][state.j] = value;
+                        
+                        if (state.j === 0) {
+                            updateCodeHighlight(7);
+                        } else {
+                            updateCodeHighlight(9);
+                        }
+                        
+                        updateStatus(`Filled table[${state.i}][${state.j}] = ${value}`);
+                    }
+                    
+                    if (state.step === state.maxSteps.fill) {
+                        updateStatus(`✅ Fill complete! All ${state.rows * state.cols} cells filled.`);
+                        updateCodeHighlight(11);
+                    }
+                }
+            }
+        }
+        
+        function nextStepPrintTraditional() {
+            if (state.step < state.maxSteps.printTraditional) {
+                state.step++;
+                
+                if (state.step === 1) {
+                    state.printI = 0;
+                    state.printJ = 0;
+                    updateCodeHighlight(14);
+                    updateStatus("Started printing with traditional loops.");
+                    state.consoleOutput = [];
+                } else {
+                    let cellIndex = state.step - 2;
+                    let totalCols = state.cols;
+                    
+                    let i = Math.floor(cellIndex / totalCols);
+                    let j = cellIndex % totalCols;
+                    
+                    if (i < state.rows && j < state.cols) {
+                        state.printI = i;
+                        state.printJ = j;
+                        
+                        let value = state.table[i][j];
+                        if (j === 0 && i > 0) {
+                            state.consoleOutput.push('\n');
+                        }
+                        state.consoleOutput.push(value + '\t');
+                        
+                        updateCodeHighlight(16);
+                        updateStatus(`Printing table[${i}][${j}] = ${value}`);
+                        
+                        document.getElementById('consoleOutput').textContent = state.consoleOutput.join('');
+                    }
+                    
+                    if (state.step === state.maxSteps.printTraditional) {
+                        state.consoleOutput.push('\n');
+                        document.getElementById('consoleOutput').textContent = state.consoleOutput.join('');
+                        updateStatus("✅ Printing complete!");
+                        updateCodeHighlight(19);
+                    }
+                }
+            }
+        }
+        
+        function nextStepPrintEnhanced() {
+            if (state.step < state.maxSteps.printEnhanced) {
+                state.step++;
+                
+                if (state.step === 1) {
+                    // Start of enhanced loops
+                    state.currentRowIndex = 0;
+                    state.currentColIndex = 0;
+                    state.currentRowArray = state.table[0];
+                    state.currentValue = state.table[0][0];
+                    updateCodeHighlight(22);
+                    updateStatus("Started printing with enhanced for-each loops.");
+                    state.consoleOutput = [];
+                } else {
+                    // Calculate which cell we're on (0-indexed)
+                    let cellIndex = state.step - 2; // 0, 1, 2, 3, ...
+                    
+                    // Calculate row and column from cell index
+                    let rowIndex = Math.floor(cellIndex / state.cols);
+                    let colIndex = cellIndex % state.cols;
+                    
+                    if (rowIndex < state.rows) {
+                        // Update current position
+                        state.currentRowIndex = rowIndex;
+                        state.currentColIndex = colIndex;
+                        state.currentRowArray = state.table[rowIndex];
+                        state.currentValue = state.table[rowIndex][colIndex];
+                        
+                        // Add to console output
+                        if (colIndex === 0 && rowIndex > 0) {
+                            state.consoleOutput.push('\n');
+                        }
+                        state.consoleOutput.push(state.currentValue + '\t');
+                        
+                        // Highlight appropriate line
+                        if (colIndex === 0) {
+                            updateCodeHighlight(22); // Outer enhanced loop (new row)
+                        } else {
+                            updateCodeHighlight(24); // Print statement
+                        }
+                        
+                        updateStatus(`Enhanced loop: row ${rowIndex}, col ${colIndex}, value = ${state.currentValue}`);
+                        
+                        // Update console display
+                        document.getElementById('consoleOutput').textContent = state.consoleOutput.join('');
+                    }
+                    
+                    // Check if we've completed all cells
+                    if (state.step === state.maxSteps.printEnhanced) {
+                        // Add final newline
+                        state.consoleOutput.push('\n');
+                        document.getElementById('consoleOutput').textContent = state.consoleOutput.join('');
+                        updateStatus("✅ Enhanced loops complete! All cells printed.");
+                        updateCodeHighlight(27);
+                    }
+                }
+            }
+        }
+        
+        function previousStep() {
+            if (state.step > 1) {
+                let targetStep = state.step - 1;
+                resetVisualization();
+                
+                while (state.step < targetStep) {
+                    nextStep();
+                }
+            }
+        }
+        
+        function resetVisualization() {
+            if (state.phase === 'fill') {
+                state.table = Array(state.rows).fill().map(() => Array(state.cols).fill('?'));
+                state.i = -1;
+                state.j = -1;
+            } else {
+                fillArrayCompletely();
+                if (state.phase === 'printTraditional') {
+                    state.printI = -1;
+                    state.printJ = -1;
+                } else {
+                    state.currentRowArray = null;
+                    state.currentRowIndex = -1;
+                    state.currentColIndex = -1;
+                    state.currentValue = null;
+                }
+                state.consoleOutput = [];
+                document.getElementById('consoleOutput').textContent = '';
+            }
+            
+            state.step = 0;
+            
+            updateDisplay();
+            if (state.phase === 'fill') {
+                updateCodeHighlight(5);
+            } else if (state.phase === 'printTraditional') {
+                updateCodeHighlight(14);
+            } else {
+                updateCodeHighlight(22);
+            }
+            updateStatus("Reset complete. Click Next to start.");
+        }
+        
+        function runToEnd() {
+            while (state.step < state.maxSteps[state.phase]) {
+                nextStep();
+            }
+        }
+        
+        function updateDisplay() {
+            // Update common variables
+            document.getElementById('varRows').textContent = state.rows;
+            document.getElementById('varCols').textContent = state.cols;
+            
+            if (state.phase === 'fill') {
+                document.getElementById('vari').textContent = state.i >= 0 ? state.i : '-';
+                document.getElementById('varj').textContent = state.j >= 0 ? state.j : '-';
+                
+                if (state.i >= 0 && state.j >= 0) {
+                    document.getElementById('currentCell').textContent = `table[${state.i}][${state.j}]`;
+                } else {
+                    document.getElementById('currentCell').textContent = '-';
+                }
+            } else if (state.phase === 'printTraditional') {
+                document.getElementById('printI').textContent = state.printI >= 0 ? state.printI : '-';
+                document.getElementById('printJ').textContent = state.printJ >= 0 ? state.printJ : '-';
+                
+                if (state.printI >= 0 && state.printJ >= 0) {
+                    document.getElementById('currentCell').textContent = `table[${state.printI}][${state.printJ}]`;
+                } else {
+                    document.getElementById('currentCell').textContent = '-';
+                }
+            } else if (state.phase === 'printEnhanced') {
+                // Show enhanced loop variables
+                document.getElementById('currentRowArray').textContent = state.currentRowArray ? `[${state.currentRowArray.join(', ')}]` : '-';
+                document.getElementById('currentRowIndex').textContent = state.currentRowIndex >= 0 ? state.currentRowIndex : '-';
+                document.getElementById('currentColIndex').textContent = state.currentColIndex >= 0 ? state.currentColIndex : '-';
+                document.getElementById('currentValue').textContent = state.currentValue !== null ? state.currentValue : '-';
+                
+                if (state.currentRowIndex >= 0 && state.currentColIndex >= 0) {
+                    document.getElementById('currentCell').textContent = `table[${state.currentRowIndex}][${state.currentColIndex}] = ${state.currentValue}`;
+                } else {
+                    document.getElementById('currentCell').textContent = '-';
+                }
+            }
+            
+            // Update loop info
+            let loopInfo = '';
+            if (state.phase === 'fill') {
+                if (state.step === 0) loopInfo = '⏳ Ready to fill array';
+                else if (state.step === state.maxSteps.fill) loopInfo = '✅ Fill complete';
+                else loopInfo = `🔄 Filling cell ${state.step-1}/${state.rows * state.cols}: table[${state.i}][${state.j}]`;
+            } else if (state.phase === 'printTraditional') {
+                if (state.step === 0) loopInfo = '⏳ Ready to print';
+                else if (state.step === state.maxSteps.printTraditional) loopInfo = '✅ Printing complete';
+                else loopInfo = `🔄 Printing cell ${state.step-1}/${state.rows * state.cols}: table[${state.printI}][${state.printJ}]`;
+            } else if (state.phase === 'printEnhanced') {
+                if (state.step === 0) loopInfo = '⏳ Ready to print with enhanced loops';
+                else if (state.step === state.maxSteps.printEnhanced) loopInfo = '✅ Enhanced loops complete';
+                else {
+                    let currentCell = state.step - 1;
+                    let totalCells = state.rows * state.cols;
+                    loopInfo = `🔄 Enhanced loop: processing cell ${currentCell}/${totalCells} (row ${state.currentRowIndex}, col ${state.currentColIndex})`;
+                }
+            }
+            document.getElementById('loopInfo').textContent = loopInfo;
+            
+            // Render table
+            renderTable();
+        }
+        
+        function renderTable() {
+            let html = '<table><tr><th>Row\Col</th>';
+            
+            for (let j = 0; j < state.cols; j++) {
+                html += `<th>${j + 1}</th>`;
+            }
+            html += '</tr>';
+            
+            for (let i = 0; i < state.rows; i++) {
+                html += `<tr><th>${i + 1}</th>`;
+                for (let j = 0; j < state.cols; j++) {
+                    let cellClass = '';
+                    
+                    if (state.phase === 'fill') {
+                        if (state.i === i && state.j === j && state.step > 1 && state.step < state.maxSteps.fill) {
+                            cellClass = 'current-cell';
+                        } else if (state.table[i][j] !== '?') {
+                            cellClass = 'filled-cell';
+                        }
+                    } else if (state.phase === 'printTraditional') {
+                        if (state.printI === i && state.printJ === j && state.step > 1 && state.step < state.maxSteps.printTraditional) {
+                            cellClass = 'printing-cell';
+                        } else {
+                            cellClass = 'filled-cell';
+                        }
+                    } else if (state.phase === 'printEnhanced') {
+                        // Calculate the order in which cells are processed
+                        let cellOrder = i * state.cols + j; // 0,1,2,3,4,5,6,7,8,9,10,11 for 3x4
+                        let currentStep = state.step - 1; // Current cell being processed (1-indexed to 0-indexed)
+                        
+                        if (cellOrder < currentStep && currentStep <= state.maxSteps.printEnhanced - 1) {
+                            // Cells that have already been printed
+                            cellClass = 'printed-cell'; // Purple
+                        } else if (cellOrder === currentStep && currentStep < state.maxSteps.printEnhanced - 1) {
+                            // Current cell being printed
+                            cellClass = 'printing-cell'; // Blue
+                        } else {
+                            // Cells not yet printed (but filled with values)
+                            cellClass = 'filled-cell'; // Green
+                        }
+                        
+                        // Special case: when we've completed all cells, mark all as printed
+                        if (state.step === state.maxSteps.printEnhanced) {
+                            cellClass = 'printed-cell';
+                        }
+                    }
+                    
+                    html += `<td class="${cellClass}">${state.table[i][j]}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            
+            document.getElementById('tableContainer').innerHTML = html;
+        }
+        
+        function updateCodeHighlight(lineNum) {
+            // Reset all highlights
+            for (let i = 1; i <= 27; i++) {
+                let line = document.getElementById(`line${i}`);
+                if (line) {
+                    line.classList.remove('current', 'array-fill', 'enhanced-loop');
+                }
+            }
+            
+            // Highlight based on phase and line
+            if (state.phase === 'fill') {
+                if (state.step === 1) {
+                    document.getElementById('line5').classList.add('current');
+                } else if (state.step > 1 && state.step < state.maxSteps.fill) {
+                    if (state.j === 0) {
+                        document.getElementById('line7').classList.add('current');
+                    } else {
+                        document.getElementById('line9').classList.add('array-fill');
+                    }
+                } else if (state.step === state.maxSteps.fill) {
+                    document.getElementById('line11').classList.add('current');
+                }
+            } else if (state.phase === 'printTraditional') {
+                if (state.step === 1) {
+                    document.getElementById('line14').classList.add('current');
+                } else if (state.step > 1 && state.step < state.maxSteps.printTraditional) {
+                    document.getElementById('line16').classList.add('current');
+                } else if (state.step === state.maxSteps.printTraditional) {
+                    document.getElementById('line19').classList.add('current');
+                }
+            } else if (state.phase === 'printEnhanced') {
+                if (state.step === 1) {
+                    // Start of enhanced loops
+                    document.getElementById('line22').classList.add('enhanced-loop');
+                    document.getElementById('line22').classList.add('current');
+                } else if (state.step > 1 && state.step < state.maxSteps.printEnhanced) {
+                    // During execution
+                    let colIndex = (state.step - 2) % state.cols;
+                    if (colIndex === 0) {
+                        // First column of a row - highlight outer loop
+                        document.getElementById('line22').classList.add('enhanced-loop');
+                        document.getElementById('line22').classList.add('current');
+                    } else {
+                        // Other columns - highlight print statement
+                        document.getElementById('line24').classList.add('current');
+                    }
+                } else if (state.step === state.maxSteps.printEnhanced) {
+                    // Completed
+                    document.getElementById('line27').classList.add('current');
+                }
+            }
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('statusMessage').textContent = message;
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            // Set enhanced loop as default
+            document.getElementById('phaseEnhanced').classList.add('active');
+            initializeArray();
+        };
+    </script>
+</body>
+</html>
